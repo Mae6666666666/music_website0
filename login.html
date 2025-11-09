@@ -1,0 +1,48 @@
+<!--https://catfact.ninja/fact-->
+
+<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <title>Login</title>
+      </head>
+      <body>
+        <h1>Login Page</h1>
+        <form id="loginForm">
+          <label>Username:</label><br>
+          <input type="text" id="username" required><br><br>
+          <label>Password:</label><br>
+          <input type="password" id="password" required><br><br>
+          <button type="submit">Login</button>
+        </form>
+
+        <p id="message"></p>
+
+        <script>
+            const form = document.getElementById("loginForm");
+            const message = document.getElementById("message");
+
+            form.addEventListener("submit", myFunc);
+
+            async function myFunc(event){
+                event.preventDefault()
+                console.log("submit pressed")
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+
+                const response = await fetch("/login", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ username, password }),
+                });
+
+                const data = await response.json();
+                message.textContent = data.message;
+
+                if (response.ok) {
+                  // Redirect to the protected page
+                  window.location.href = "/dashboard";
+                }
+            }
+        </script>
+      </body>
+    </html>
