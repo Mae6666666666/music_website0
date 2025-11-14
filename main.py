@@ -35,6 +35,7 @@ async def home():
     html_content = about_path.read_text(encoding="utf-8")
     return HTMLResponse(content=html_content)
 
+# this one dont require a passowrd
 @app.get("/about", response_class=HTMLResponse)
 async def about():
     about_path = BASE_DIR / "about.html"
@@ -64,9 +65,11 @@ async def logout(request: Request):
     request.session.clear()
     return RedirectResponse(url="/", status_code=303)
 
+# this one requires password
+
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
-    # wherever the name "user" is used, its gonna get that data and put it in this variable
+    # wherever the name "user" is used, it's gonna get that data and put it in this variable
     user = request.session.get("user")
     # if the user does not match what is in user
     if not user:
@@ -80,4 +83,34 @@ async def dashboard(request: Request):
     html_content = html_content.replace("{{user}}", user)
 
     return HTMLResponse(content=html_content)
+
+@app.get("/monkey_balls", response_class=HTMLResponse)
+async def dashboard(request: Request):
+    user = request.session.get("user")
+    if not user:
+        return RedirectResponse(url="/", status_code=303)
+    html_path = BASE_DIR / "monkey_balls.html"
+    html_content = html_path.read_text(encoding="utf-8")
+    html_content = html_content.replace("{{user}}", user)
+    return HTMLResponse(content=html_content)
+
+@app.get("/not_so_personal", response_class=HTMLResponse)
+async def casino_cups_page():
+    casino_cups = BASE_DIR / "not_so_personal.html"
+    html_content = casino_cups.read_text(encoding="utf-8")
+    return HTMLResponse(content=html_content)
+
+@app.get("/personal_life", response_class=HTMLResponse)
+async def about_me(request: Request):
+    user = request.session.get("user")
+    if not user:
+        return RedirectResponse(url="/", status_code=303)
+    html_path = BASE_DIR / "personal_life.html"
+    html_content = html_path.read_text(encoding="utf-8")
+    html_content = html_content.replace("{{user}}", user)
+    return HTMLResponse(content=html_content)
+
+
+
+
 

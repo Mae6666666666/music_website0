@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Gorillaz Facts</h1>
+    <p>To access this content, please sign in:</p>
+    <label>Username</label>
+    <input type="text" id="Username" required><br><br/>
+    <label>Password</label>
+    <input/><br><br>
+    <button>Sign In</button>
+
+    <script>
+        const form = document.getElementById("loginForm");
+            const message = document.getElementById("message");
+
+            form.addEventListener("Sign In", myFunc);
+
+            async function myFunc(event){
+                event.preventDefault()
+                console.log("Sign in Pressed")
+                const username = document.getElementById("Username").value;
+                const password = document.getElementById("Password").value;
+
+                const response = await fetch("/login", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ username, password }),
+                });
+
+                const data = await response.json();
+                message.textContent = data.message;
+
+            }
+    </script>
+
+</body>
+</html>
